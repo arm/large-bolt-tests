@@ -6,7 +6,6 @@ RUN:   unzstd %p/Inputs/postgres.zst \
 RUN:   -o %p/Output/postgres
 RUN: llvm-bolt %p/Output/postgres -o %t |& FileCheck %s
 CHECK: BOLT-INFO: Target architecture: aarch64
-# TODO:change this to remove -NOT before submitting this 
 CHECK-NOT: BOLT-ERROR: unable to get new address corresponding to input address 0x2cb1b0 in function ExecInterpExpr/1
 
 # Check that llvm-bolt can processes postgres binary for aarch64 with relocations enabled and --skip-funcs

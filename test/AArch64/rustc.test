@@ -6,7 +6,6 @@ RUN:   unzstd %p/Inputs/rustc.zst \
 RUN:   -o %p/Output/rustc
 RUN: llvm-bolt %p/Output/rustc -o %t |& FileCheck %s
 CHECK: BOLT-INFO: Target architecture: aarch64
-# TODO:change this to remove -NOT before submitting this 
 CHECK-NOT: BOLT-ERROR
 
 # Check that llvm-bolt can processes rustc binary for aarch64 with relocations enabled

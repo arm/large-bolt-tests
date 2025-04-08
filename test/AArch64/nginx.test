@@ -6,7 +6,6 @@ RUN:   unzstd %p/Inputs/nginx.zst \
 RUN:   -o %p/Output/nginx
 RUN: llvm-bolt %p/Output/nginx -o %t |& FileCheck %s
 CHECK: BOLT-INFO: Target architecture: aarch64
-# TODO:change this to remove -NOT before submitting this 
 CHECK-NOT: BOLT-ERROR
 
 # Check that llvm-bolt can processes nginx binary for aarch64 with relocations enabled and --skip-funcs

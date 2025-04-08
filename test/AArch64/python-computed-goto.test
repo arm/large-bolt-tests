@@ -6,7 +6,6 @@ RUN:   unzstd %p/Inputs/python3.12.zst \
 RUN:   -o %p/Output/python3.12
 RUN: llvm-bolt %p/Output/python3.12 -o %t |& FileCheck %s
 CHECK: BOLT-INFO: Target architecture: aarch64
-# TODO:change this to remove -NOT before submitting this 
 CHECK-NOT: BOLT-ERROR: unable to get new address corresponding to input address 0x1b3f14 in function sre_ucs1_match/1
 
 # Check that llvm-bolt can processes python3.12 binary for aarch64 with relocations enabled
