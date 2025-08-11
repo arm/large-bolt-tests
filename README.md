@@ -3,6 +3,9 @@
 This is a testsuite containing large binaries for
 [BOLT](https://github.com/llvm/llvm-project/tree/main/bolt).
 
+This repository is Arm-specific and includes only tests targeting the AArch64
+architecture. All non-AArch64 (e.g., X86) tests have been removed.
+
 ## Usage
 ### Prerequisites
 - Install binary tests prerequisites:

@@ -1,4 +1,4 @@
-# Check that llvm-bolt can not processes envoy binary for aarch64 with relocations enabled
+# Check that llvm-bolt can processes mysql binary for aarch64 with relocations enabled
 
 RUN: mkdir -p %p/Output
 RUN: test -f %p/Output/mysql || \
@@ -6,4 +6,4 @@ RUN:   unzstd %p/Inputs/mysql.zst \
 RUN:   -o %p/Output/mysql
 RUN: llvm-bolt %p/Output/mysql -o %t |& FileCheck %s -check-prefix=TRYCHECK
 TRYCHECK: BOLT-INFO: Target architecture: aarch64
-XFAIL: *
+TRYCHECK: BOLT-INFO: patched build-id
