@@ -1,4 +1,5 @@
-# Check that llvm-bolt can processes python3.12 binary for aarch64 with relocations enabled
+# Check that llvm-bolt can processes python3.12 binary for aarch64 with relocations enabled.
+# Related to https://github.com/llvm/llvm-project/pull/120267.
 
 RUN: mkdir -p %p/Output
 RUN: test -f %p/Output/python3.12 || \

@@ -1,4 +1,4 @@
-# Check that llvm-bolt can processes nginx binary for aarch64
+# Check that llvm-bolt can processes nginx binary for aarch64.
 
 RUN: mkdir -p %p/Output
 RUN: test -f %p/Output/nginx || \

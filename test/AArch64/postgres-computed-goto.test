@@ -1,4 +1,5 @@
-# Check that llvm-bolt can processes postgres binary for aarch64 with relocations enabled
+# Check that llvm-bolt can processes postgres binary for aarch64 with relocations enabled.
+# Related to https://github.com/llvm/llvm-project/issues/120992#issuecomment-2605903532.
 
 RUN: mkdir -p %p/Output
 RUN: test -f %p/Output/postgres || \

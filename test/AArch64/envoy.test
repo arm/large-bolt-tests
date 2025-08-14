@@ -1,4 +1,4 @@
-# Check that llvm-bolt can not processes envoy binary for aarch64 with relocations enabled
+# Check that llvm-bolt can not processes envoy binary for aarch64 with relocations enabled.
 
 RUN: mkdir -p %p/Output
 RUN: test -f %p/Output/envoy || \

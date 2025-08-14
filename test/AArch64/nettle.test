@@ -1,4 +1,5 @@
-# Check that llvm-bolt can processes nettle binary for aarch64
+# Check that llvm-bolt can processes nettle binary for aarch64.
+# Related to https://github.com/llvm/llvm-project/issues/125490.
 
 RUN: mkdir -p %p/Output
 RUN: test -f %p/Output/nettle || \
