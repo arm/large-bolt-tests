@@ -1,4 +1,4 @@
-# bolt-tests
+# large-bolt-tests
 
 This is a testsuite containing large binaries for
 [BOLT](https://github.com/llvm/llvm-project/tree/main/bolt).
@@ -22,13 +22,13 @@ Configure LLVM with the `LLVM_EXTERNAL_PROJECTS` and
 
 ```
 $ git clone https://github.com/llvm/llvm-project
-$ git clone https://github.com/rafaelauler/bolt-tests
+$ git clone https://github.com/arm/large-bolt-tests
 $ cmake -B bolt-build -G Ninja llvm-project/llvm \
    -DCMAKE_BUILD_TYPE=Release \
-   -DLLVM_TARGETS_TO_BUILD="X86;AArch64" \
+   -DLLVM_TARGETS_TO_BUILD="AArch64" \
    -DLLVM_ENABLE_PROJECTS="clang;lld;bolt" \
    -DLLVM_EXTERNAL_PROJECTS="bolttests" \
-   -DLLVM_EXTERNAL_BOLTTESTS_SOURCE_DIR=$(pwd)/bolt-tests
+   -DLLVM_EXTERNAL_BOLTTESTS_SOURCE_DIR=$(pwd)/large-bolt-tests
 $ cmake --build bolt-build --target check-large-bolt
 ```
 
