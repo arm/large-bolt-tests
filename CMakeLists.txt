@@ -5,10 +5,10 @@
 
 find_package(Python3 COMPONENTS Interpreter)
 
-set(BOLTTESTS_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-set(BOLTTESTS_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
+set(BOLTTESTS_ARM_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+set(BOLTTESTS_ARM_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
 
-set(BOLTTESTS_DEPS
+set(BOLTTESTS_ARM_DEPS
   count
   FileCheck
   llvm-bat-dump
@@ -34,14 +34,14 @@ configure_lit_site_cfg(
   )
 
 # This may easily OOM the machine, so we limit jobs to 4
-add_lit_testsuite(check-large-bolt "Running bolt large bins testsuite"
+add_lit_testsuite(check-large-bolt-arm "Running Arm bolt large bins testsuite"
   ${CMAKE_CURRENT_BINARY_DIR}
-  DEPENDS ${BOLTTESTS_DEPS}
+  DEPENDS ${BOLTTESTS_ARM_DEPS}
   ARGS "-j4"
   )
 
-add_lit_testsuites(BOLTTESTS ${CMAKE_CURRENT_SOURCE_DIR}
-  DEPENDS ${BOLTTESTS_DEPS}
+add_lit_testsuites(BOLTTESTS_ARM ${CMAKE_CURRENT_SOURCE_DIR}
+  DEPENDS ${BOLTTESTS_ARM_DEPS}
   )
 
-set_target_properties(check-large-bolt PROPERTIES FOLDER "bolt large bins testsuite")
+set_target_properties(check-large-bolt-arm PROPERTIES FOLDER "bolt arm large bins testsuite")
