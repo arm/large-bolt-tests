@@ -1,0 +1,45 @@
+# Check that perf2bolt can process perfscript format profile with Arm SPE data
+# and Bolt is able to do optimization based on the resulting Bolt format profile.
+# This example uses a pre-generated profile in perfscript format which
+# was created by perf2bolt '--profile-format=perfscript' option.
+#
+# Why does this example rely on a textual format SPE profile?
+# - To collect an Arm Spe profile by Linux Perf,
+#   it needs to have an arm developer device which has Spe support.
+# - To decode SPE data, it also needs to have the proper version of Linux Perf.
+#   The minimum required version of Linux Perf is v6.15.
+#
+# The input perfscript format profile was created by the following steps:
+# 1)
+#  - Gather SPE profile by using Perf
+#     $ perf record -e 'arm_spe_0/branch_filter=1/u' -- ./bzip2 'random-large.text'
+# 2)
+#  - Generate perfscript format profile by using perf2bolt:
+#     $ perf2bolt bzip2 -p perf.data -o perf-script-spe.text --profile-format=perfscript --spe
+
+RUN: mkdir -p %p/Output
+RUN: test -f %p/Output/bzip2 || \
+RUN:   unzstd %p/Inputs/bzip2.zst \
+RUN:   -o %p/Output/bzip2
+
+RUN: test -f %p/Output/perf-script-spe.text || \
+RUN:   unzstd %p/Inputs/perf-script-spe.text.zst \
+RUN:   -o %p/Output/perf-script-spe.text
+
+RUN: perf2bolt %p/Output/bzip2 -p %p/Output/perf-script-spe.text \
+RUN: -o %p/Output/perf-script-spe.text.fdata -ps --spe --ignore-build-id \
+RUN: 2>&1 | FileCheck %s -check-prefix=CHECK-P2B
+
+RUN: llvm-bolt %p/Output/bzip2 -o %t -dyno-stats \
+RUN: -data %p/Output/perf-script-spe.text.fdata -reorder-blocks=cache -split-functions \
+RUN: 2>&1 | FileCheck %s -check-prefix=CHECK-BOLT
+
+CHECK-P2B: PERF2BOLT: parsing a textual perf-script events...
+CHECK-P2B: PERF2BOLT: parsing perf-script mmap events output
+CHECK-P2B: PERF2BOLT: parsing perf-script task events output
+CHECK-P2B: PERF2BOLT: parse SPE branch events in brstack-format...
+CHECK-P2B: PERF2BOLT: wrote {{[0-9]+}} objects and {{[0-9]+}} memory objects to {{.*}}
+CHECK-P2B-NOT: PERF2BOLT-ERROR
+
+CHECK-BOLT-NOT: BOLT-INFO: 0 out of {{[0-9]+}} functions in the binary (0.0%) have non-empty execution profile
+
