@@ -1,9 +1,12 @@
-# Check that llvm-bolt can processes node binary for aarch64.
+# Check that llvm-bolt can process the node binary for AArch64.
 
 RUN: mkdir -p %p/Output
 RUN: test -f %p/Output/node || \
 RUN:   unzstd %p/Inputs/node.zst \
 RUN:   -o %p/Output/node
-RUN: llvm-bolt %p/Output/node -o %t 2>&1 | FileCheck %s
+RUN: llvm-bolt %p/Output/node -o %t 2>&1 | FileCheck %s --implicit-check-not=BOLT-ERROR
+
 CHECK: BOLT-INFO: Target architecture: aarch64
-CHECK-NOT: BOLT-ERROR
+CHECK: BOLT-INFO: enabling relocation mode
+CHECK: BOLT-INFO: {{Starting stub-insertion pass|starting clustered relaxation pass}}
+CHECK: BOLT-INFO: {{Inserted [0-9]+ stubs|relaxed [0-9]+ (calls|unconditional branches)}}

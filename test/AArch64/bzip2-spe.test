@@ -28,18 +28,20 @@ RUN:   -o %p/Output/perf-script-spe.text
 
 RUN: perf2bolt %p/Output/bzip2 -p %p/Output/perf-script-spe.text \
 RUN: -o %p/Output/perf-script-spe.text.fdata -ps --spe --ignore-build-id \
-RUN: 2>&1 | FileCheck %s -check-prefix=CHECK-P2B
+RUN: 2>&1 | FileCheck %s -check-prefix=CHECK-P2B --implicit-check-not=PERF2BOLT-ERROR
 
 RUN: llvm-bolt %p/Output/bzip2 -o %t -dyno-stats \
 RUN: -data %p/Output/perf-script-spe.text.fdata -reorder-blocks=cache -split-functions \
-RUN: 2>&1 | FileCheck %s -check-prefix=CHECK-BOLT
+RUN: 2>&1 | FileCheck %s -check-prefix=CHECK-BOLT --implicit-check-not=BOLT-ERROR
 
 CHECK-P2B: PERF2BOLT: parsing a textual perf-script events...
 CHECK-P2B: PERF2BOLT: parsing perf-script mmap events output
 CHECK-P2B: PERF2BOLT: parsing perf-script task events output
 CHECK-P2B: PERF2BOLT: parse SPE branch events in brstack-format...
 CHECK-P2B: PERF2BOLT: wrote {{[0-9]+}} objects and {{[0-9]+}} memory objects to {{.*}}
-CHECK-P2B-NOT: PERF2BOLT-ERROR
 
-CHECK-BOLT-NOT: BOLT-INFO: 0 out of {{[0-9]+}} functions in the binary (0.0%) have non-empty execution profile
-
+CHECK-BOLT: BOLT-INFO: Target architecture: aarch64
+CHECK-BOLT: BOLT-INFO: enabling relocation mode
+CHECK-BOLT: BOLT-INFO: {{[1-9][0-9]*}} out of {{[0-9]+}} functions in the binary ({{[0-9.]+}}%) have non-empty execution profile
+CHECK-BOLT: BOLT-INFO: {{Starting stub-insertion pass|starting clustered relaxation pass}}
+CHECK-BOLT: BOLT-INFO: {{Inserted [0-9]+ stubs|relaxed [0-9]+ (calls|unconditional branches)}}
