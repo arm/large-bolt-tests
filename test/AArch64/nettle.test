@@ -5,11 +5,7 @@ RUN: mkdir -p %p/Output
 RUN: test -f %p/Output/nettle || \
 RUN:   unzstd %p/Inputs/nettle.zst \
 RUN:   -o %p/Output/nettle
-RUN: llvm-bolt %p/Output/nettle -o %t 2>&1 | FileCheck %s
-CHECK: BOLT-INFO: Target architecture: aarch64
-CHECK-NOT: BOLT-ERROR
+RUN: llvm-bolt %p/Output/nettle -o %t 2>&1 | FileCheck %s --implicit-check-not=BOLT-ERROR
 
-# Check that llvm-bolt can processes nettle binary for aarch64 with relocations enabled
-RUN: llvm-bolt %p/Output/nettle -o %t 2>&1 | FileCheck %s -check-prefix=TRYCHECK
-TRYCHECK: BOLT-INFO: Target architecture: aarch64
-TRYCHECK: BOLT-INFO: Inserted 0 stubs
+CHECK: BOLT-INFO: Target architecture: aarch64
+CHECK: BOLT-INFO: enabling relocation mode
