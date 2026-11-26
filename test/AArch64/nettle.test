@@ -1,4 +1,4 @@
-# Check that llvm-bolt can processes nettle binary for aarch64.
+# Check that llvm-bolt can process the nettle binary for AArch64.
 # Related to https://github.com/llvm/llvm-project/issues/125490.
 
 RUN: mkdir -p %p/Output
@@ -9,3 +9,5 @@ RUN: llvm-bolt %p/Output/nettle -o %t 2>&1 | FileCheck %s --implicit-check-not=B
 
 CHECK: BOLT-INFO: Target architecture: aarch64
 CHECK: BOLT-INFO: enabling relocation mode
+CHECK: BOLT-INFO: {{Starting stub-insertion pass|starting clustered relaxation pass}}
+CHECK: BOLT-INFO: {{Inserted [0-9]+ stubs|relaxed [0-9]+ (calls|unconditional branches)}}

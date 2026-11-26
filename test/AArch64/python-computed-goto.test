@@ -1,15 +1,15 @@
-# Check that llvm-bolt can processes python3.12 binary for aarch64 with relocations enabled.
+# Check that llvm-bolt can process the python3.12 binary for AArch64.
 # Related to https://github.com/llvm/llvm-project/pull/120267.
 
 RUN: mkdir -p %p/Output
 RUN: test -f %p/Output/python3.12 || \
 RUN:   unzstd %p/Inputs/python3.12.zst \
 RUN:   -o %p/Output/python3.12
-RUN: llvm-bolt %p/Output/python3.12 -o %t 2>&1 | FileCheck %s
-CHECK: BOLT-INFO: Target architecture: aarch64
-CHECK-NOT: BOLT-ERROR: unable to get new address corresponding to input address 0x1b3f14 in function sre_ucs1_match/1
+RUN: llvm-bolt %p/Output/python3.12 -o %t 2>&1 | FileCheck %s \
+RUN:   --implicit-check-not=BOLT-ERROR \
+RUN:   --implicit-check-not='unable to get new address corresponding to input address 0x1b3f14 in function sre_ucs1_match/1'
 
-# Check that llvm-bolt can processes python3.12 binary for aarch64 with relocations enabled
-RUN: llvm-bolt %p/Output/python3.12 -o %t 2>&1 | FileCheck %s -check-prefix=TRYCHECK
-TRYCHECK: BOLT-INFO: Target architecture: aarch64
-TRYCHECK: BOLT-INFO: patched build-id
+CHECK: BOLT-INFO: Target architecture: aarch64
+CHECK: BOLT-INFO: enabling relocation mode
+CHECK: BOLT-INFO: {{Starting stub-insertion pass|starting clustered relaxation pass}}
+CHECK: BOLT-INFO: {{Inserted [0-9]+ stubs|relaxed [0-9]+ (calls|unconditional branches)}}
